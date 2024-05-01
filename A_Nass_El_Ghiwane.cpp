@@ -5,7 +5,7 @@ int main(){
     int t;cin>>t;
     while(t--){
         int n;cin>>n;
-        unordered_map<int,int> mp;
+        map<int,int> mp;
         ll count =0;
         for(int i=0;i<n;i++){
             int ai;cin>>ai;
