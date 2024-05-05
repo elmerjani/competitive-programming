@@ -2,18 +2,34 @@
 using namespace std;
 typedef long long ll;
 
-bitset<2000000> can;
+
 
 int main(){
-    int n;cin>>n;
-    can[0]=true;
-    for(int i=0;i<n;i++){
-        int x;cin>>x;
-        can=can|(can<<x);
+    ll n;cin>>n;
+    vector<ll> a(n);
+    for(int  i=0;i<n;i++){
+        cin>>a[i];
     }
-    ll i=0;
-    while(can[i])i++;
-    cout<<i<<endl;
+    sort(a.begin(),a.end());
+    if(a[0]!=1){
+        cout<<1<<endl;
+        return 0;
+    }
+    if(a[1]>2){
+        cout<<2<<endl;
+        return 0;
+    }
+    ll sum=a[0]+a[1];
+    for(int i=2;i<n;i++){
+        if(a[i]>sum+1){
+            cout<<sum+1<<endl;
+            return 0;
+        }
+        sum+=a[i];
+    }
+    cout<<sum+1<<endl;
+    return 0;
+
 
 
 
