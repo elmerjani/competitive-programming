@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 int main(){
     int t;cin>>t;
     while(t--){
@@ -23,25 +24,30 @@ int main(){
         }
         int a,b;cin>>a>>b;
         long long ans=0;
-        int left=1,right=1;
-        for(int i=1;i<=n-1;i++){
-            for(int j=i+1;j<=n;j++){
-                
-               
-                    long long f=sumArr[j]-sumArr[i-1]-(xorArr[j]^xorArr[i-1]);
-                    if(f>ans){
-                        ans=f;
+        int left=1,right=n;
+        for(int i=1;i<=n;i++){
+            ll f=sumArr[n]-sumArr[i-1]-xorArr[n]^xorArr[i-1];
+            if(f<ans)continue;
+            else {
+                //ans=f;
+                int l=i,r=n;
+                while(l<r){
+                    int mid=l+(r-l)/2;
+                    if(sumArr[mid]-sumArr[i-1]-xorArr[mid]^xorArr[i-1]<f)l=mid+1;
+                    else r=mid;
+                }
+                if(f==ans){
+                    if(r-i<right-left){
                         left=i;
-                        right=j;
+                        right=l;
                     }
-                    else if(f==ans){
-                        if(right-left>j-i){
-                            left=i;
-                            right=j;
-                        }
-                    }
+                }
+                else{
+                    ans=f;
+                    left=i;
+                    right=l;    
 
-                
+                }
             }
         }
         cout<<left<<" "<<right<<"\n";
