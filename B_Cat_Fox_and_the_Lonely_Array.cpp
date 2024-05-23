@@ -40,6 +40,25 @@ void solve(){
                 ors.push_back(a[i]);
             }
         }
+        else {
+            ll tmp=ors.back();
+            ors.pop();
+            ll tmp2=ors.back();
+            ors.pop();
+            ll ans=a[i]|tmp2;
+            if(ans==ors.back()){
+                ors.push_back(ans);
+                ors.push_back(a[i]);
+            }
+            else{
+                k++;
+                ll tmp2=ors.back()|a[i];
+                ors.pop();
+                ors.push_back(tmp2);
+                ors.push_back(ans);
+                ors.push_back(a[i]);
+            }
+        }
 
         
 

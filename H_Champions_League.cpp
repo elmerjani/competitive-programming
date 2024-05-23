@@ -9,7 +9,7 @@ int main() {
 
     vector<bool> possible1(n, false), possible2(n, false);
 
-    for (int k = 0; k <= n/2 ; ++k) {
+    for (int k = 0; k <= n ; k++) {
         if (2 * k > n) break;
         
         for (int i = 0; i < k; ++i) {

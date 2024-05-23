@@ -31,10 +31,26 @@ pair<int,int> maxSubArraySum(vector<int> ,int start,int end)
 }
 
 long getMaximumGrossValue(vector<int> arr) {
+    vector<long> prefix(n + 1, 0);
+    for (int i = 1; i <= n; ++i) {
+        prefix[i] = prefix[i - 1] + arr[i - 1];
+    }
     int n = arr.size();
     pair<int,int> p=maxSubArraySum(arr,0,n);
     if(p.first==0){
-        pair<int,int> p2=maxSubArraySum(arr,p.second+1,)
+        pair<int,int> p2=maxSubArraySum(arr,p.second+1,n);
+        long sum=0;
+        for(int i=p.first;i<=p.second,i++)sum+=arr[i];
+        for(int i=p.second+1;i<p2.second;i++)sum+=(-arr[i]);
+        for(int i=p2.first;i<=p2.second;i++)sum+=arr[i];
+        for(int i=p2.second;i<n;i++)sum+=arr[i];
+        return sum;
+
+    }
+    else {
+        for(int)
+
+
     }
 }
 

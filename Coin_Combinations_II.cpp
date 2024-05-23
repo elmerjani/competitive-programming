@@ -3,7 +3,7 @@ using namespace std;
 typedef long long ll;
 const ll MOD=1e9+7;
 const ll MAXN=1e6+1;
-vector<ll> dp(MAXN,0);
+vector<vector<ll>> dp(MAXN,vector<ll>(MAXN,0));
 int main(){
     ll n,x;cin>>n>>x;
     vector<ll>coins(n);
