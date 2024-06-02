@@ -1,34 +1,65 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-void search(ll &x,ll &sum,ll &n,ll k,ll &count,vector<ll> &a){
+unordered_map<ll,ll> mp;
+ll countt=0;
+ll x;
+void search(ll &sum,ll n,ll k,vector<ll> a){
     //cout<<k<<" "<<sum<<" "<<x<<"\n";
     if(n==k){
         
-        if(sum==x)count++;
+        mp[sum]++;
         return ;
         
     }
-    if(sum>x)return;
+    //if(sum>x)return;
     
-    search(x,sum,n,k+1,count,a);
+    search(sum,n,k+1,a);
     sum+=a[k];
-    search(x,sum,n,k+1,count,a);
+    search(sum,n,k+1,a);
     sum-=a[k];
 
 
 }
-int main(){
-    ll n,x;cin>>n>>x;
-    vector<ll> a(n);
-    for(int i=0;i<n;i++){
-        cin>>a[i];
+void searchb(ll &sum,ll n,ll k,vector<ll> b){
+    //cout<<k<<" "<<sum<<" "<<x<<"\n";
+    if(n==k){
+        
+        countt+=mp[x-sum];
+        return ;
+        
     }
-    ll count=0;
+    //if(sum>x)return;
+    
+    searchb(sum,n,k+1,b);
+    sum+=b[k];
+    searchb(sum,n,k+1,b);
+    sum-=b[k];
+
+
+}
+int main(){
+    ll n;cin>>n>>x;
+    vector<ll> a,b;
+    for(int i=0;i<n/2;i++){
+        ll ai;cin>>ai;
+        a.push_back(ai);
+    }
+    for(int i=n/2;i<n;i++){
+        ll bi;cin>>bi;
+        b.push_back(bi);
+    }
+    //countt=0;
     ll sum=0;
-    search(x,sum,n,0,count,a);
-    cout<<count<<endl;
+    search(sum,a.size(),0,a);
+    sum=0;
+    searchb(sum,b.size(),0,b);
+    //for(auto u:mp){
+      //  cout<<u.first<<" "<<u.second<<"\n";
+    //}
+    cout<<countt<<endl;
     //return 0;
     
 
 }
+//mp+sum=x
