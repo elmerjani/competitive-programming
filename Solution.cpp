@@ -1,106 +1,50 @@
 #include <bits/stdc++.h>
-
 using namespace std;
-
-void solve() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, m;
-        cin >> n >> m;
-        int total_candidates = n + m + 1;
-        vector<int> a(total_candidates);
-        vector<int> b(total_candidates);
-
-        for (int i = 0; i < total_candidates; ++i) {
-            cin >> a[i];
-        }
-        for (int i = 0; i < total_candidates; ++i) {
-            cin >> b[i];
-        }
-
-        // Prefix sums for programming and testing skills
-        vector<long long> prefix_prog(total_candidates + 1, 0);
-        vector<long long> prefix_test(total_candidates + 1, 0);
-
-        for (int i = 1; i <= total_candidates; ++i) {
-            prefix_prog[i] = prefix_prog[i - 1] + a[i - 1];
-            prefix_test[i] = prefix_test[i - 1] + b[i - 1];
-        }
-
-        // Suffix sums for programming and testing skills
-        vector<long long> suffix_prog(total_candidates + 1, 0);
-        vector<long long> suffix_test(total_candidates + 1, 0);
-
-        for (int i = total_candidates - 1; i >= 0; --i) {
-            suffix_prog[i] = suffix_prog[i + 1] + a[i];
-            suffix_test[i] = suffix_test[i + 1] + b[i];
-        }
-
-        // Results for each candidate
-        vector<long long> results(total_candidates);
-
-        for (int i = 0; i < total_candidates; ++i) {
-            // Total skill without candidate i
-            long long skill_without_i = 0;
-
-            // Calculate the skill of the team excluding candidate i
-            // Assume candidate i is excluded, calculate using prefix and suffix sums
-            long long total_prog = prefix_prog[i] + suffix_prog[i + 1];
-            long long total_test = prefix_test[i] + suffix_test[i + 1];
-
-            // Calculate the number of programmers and testers in the remaining candidates
-            int remaining_prog = n;
-            int remaining_test = m;
-
-            // Determine initial assignment of remaining candidates
-            vector<int> roles(total_candidates, -1); // -1: unassigned, 0: programmer, 1: tester
-            for (int j = 0; j < total_candidates; ++j) {
-                if (j == i) continue; // Skip the excluded candidate
-
-                if (a[j] >= b[j]) {
-                    if (remaining_prog > 0) {
-                        roles[j] = 0; // Programmer
-                        remaining_prog--;
-                    } else {
-                        roles[j] = 1; // Tester
-                        remaining_test--;
-                    }
-                } else {
-                    if (remaining_test > 0) {
-                        roles[j] = 1; // Tester
-                        remaining_test--;
-                    } else {
-                        roles[j] = 0; // Programmer
-                        remaining_prog--;
-                    }
+class Solution {
+public:
+    bool bfs(int start,const vector<int> adj[],vector<bool> used,const vector<int> nums){
+        used[start]=true;
+        queue<int> q;
+        q.push(start);
+        while(!q.empty()){
+            int u=q.front();
+            if(nums[u]==0)return true;
+            q.pop();
+            for(auto v:adj[u]){
+                if(!used[v]){
+                    used[v]=true;
+                    q.push(v);
                 }
             }
-
-            // Calculate the total skill for the remaining candidates
-            for (int j = 0; j < total_candidates; ++j) {
-                if (j == i) continue;
-                if (roles[j] == 0) {
-                    skill_without_i += a[j];
-                } else {
-                    skill_without_i += b[j];
-                }
-            }
-
-            results[i] = skill_without_i;
         }
+        return false;
 
-        // Print results for the current test case
-        for (int i = 0; i < total_candidates; ++i) {
-            cout << results[i] << " ";
-        }
-        cout << endl;
     }
-}
+    bool canReach(vector<int>& arr, int start) {
+        int n=arr.size();
+        vector<int> adj[n];
+        vector<bool> used(n,false);
+        for(int i=0;i<n;i++){
+            if(i+arr[i]<n){
+                adj[i].push_back(i+arr[i]);
+                adj[i+arr[i]].push_back(i);
+            }
+            if(i-arr[i]>=0){
+                adj[i].push_back(i-arr[i]);
+                adj[i-arr[i]].push_back(i);
+            }
+        }
+        return bfs(start,adj,used,arr);
+        
+        
+    }
+};
+int main(){
+    vector<int> arr={3,0,2,1,2};
+    int start=2;
+    Solution s;
+    if(s.canReach(arr,start))cout<<"true\n";
+    else cout<<"false\n";
+    
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    solve();
-    return 0;
 }
