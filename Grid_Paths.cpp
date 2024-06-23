@@ -1,36 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-const int MAXN=1e3;
-vector<string> grid(MAXN);
-vector<vector<ll>> dp(MAXN,vector<ll>(MAXN,0));
-ll MOD=1e9+7;
-int main(){
-    int n;cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>grid[i];
+int ans=0;
+void search(int i,int j,vector<vector<bool>> visited, string path,int k){
+    //cout<<k<<"\n";
+    if(i<0||i>6||j<0||j>6||visited[i][j])return ;
+    visited[i][j]=true;
+    if(k==48 && i==6&&j==0){
+        ans++;
+        return ;
     }
-    
-    for(int i=0;i<n;i++){
-        if(grid[i][0]=='.')dp[i][0]=1;
-        else break;
-    }
-    for(int j=0;j<n;j++){
-        if(grid[0][j]=='.')dp[0][j]=1;
-        else break;
-    }
-    for(int i=1;i<n;i++){
-        for(int j=1;j<n;j++){
-            if(grid[i][j]=='*')dp[i][j]=0;
-            else{
-                
-                dp[i][j]=(dp[i-1][j]+dp[i][j-1])%MOD;
-                
-            }
-            
-        }
-    }
-    cout<<dp[n-1][n-1]<<"\n";
-    
+    if(path[k]=='D'||path[k]=='?')search(i+1,j,visited,path,k+1);
+    if(path[k]=='U'||path[k]=='?')search(i-1,j,visited,path,k+1);
+    if(path[k]=='R'||path[k]=='?')search(i,j+1,visited,path,k+1);
+    if(path[k]=='L'||path[k]=='?')search(i,j-1,visited,path,k+1);
 
 }
+int main(){
+    string path;cin>>path;
+    vector<vector<bool>> visited(7,vector<bool>(7,false));
+    search(0,0,visited,path,0);
+    cout<<ans<<endl;
+    return 0;
+
+}
+?????????????????DLDRRURDDLLLL?URULURRUULDLL????

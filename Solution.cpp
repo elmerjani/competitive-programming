@@ -1,50 +1,89 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <climits>
+#include <sstream>
+
 using namespace std;
-class Solution {
-public:
-    bool bfs(int start,const vector<int> adj[],vector<bool> used,const vector<int> nums){
-        used[start]=true;
-        queue<int> q;
-        q.push(start);
-        while(!q.empty()){
-            int u=q.front();
-            if(nums[u]==0)return true;
-            q.pop();
-            for(auto v:adj[u]){
-                if(!used[v]){
-                    used[v]=true;
-                    q.push(v);
-                }
-            }
-        }
-        return false;
+long long MAXN=1e14;
 
-    }
-    bool canReach(vector<int>& arr, int start) {
-        int n=arr.size();
-        vector<int> adj[n];
-        vector<bool> used(n,false);
-        for(int i=0;i<n;i++){
-            if(i+arr[i]<n){
-                adj[i].push_back(i+arr[i]);
-                adj[i+arr[i]].push_back(i);
-            }
-            if(i-arr[i]>=0){
-                adj[i].push_back(i-arr[i]);
-                adj[i-arr[i]].push_back(i);
-            }
-        }
-        return bfs(start,adj,used,arr);
-        
-        
-    }
-};
-int main(){
-    vector<int> arr={3,0,2,1,2};
-    int start=2;
-    Solution s;
-    if(s.canReach(arr,start))cout<<"true\n";
-    else cout<<"false\n";
+// Function to evaluate the expression string respecting operator precedence
+long long evaluateExpression(const string& expr) {
+    vector<long long> terms;
+    stringstream termStream(expr);
+    string term;
     
+    // Split by '+'
+    while (getline(termStream, term, '+')) {
+        vector<long long> factors;
+        stringstream factorStream(term);
+        string factor;
+        
+        // Split by '*'
+        while (getline(factorStream, factor, '*')) {
+            factors.push_back(stoll(factor));
+        }
+        
+        long long product = 1;
+        for (long long f : factors) {
+            product *= f;
+            if(product >MAXN || product<0)return MAXN;
+        }
+        
+        terms.push_back(product);
+    }
+    
+    long long result = 0;
+    for (long long t : terms) {
+        result += t;
+    }
+    
+    return result;
+}
 
+void solve() {
+    int t;
+    cin >> t;
+    
+    while (t--) {
+        int n;
+        string s;
+        cin >> n >> s;
+        
+        if (n == 2) {
+            cout << s << endl;
+            continue;
+        }
+        
+        vector<char> operators = {'+', '*'};
+        long long min_value = LLONG_MAX;
+        
+        int numOperators = n - 2;
+        int totalCombinations = 1 << numOperators; // 2^(n-2) combinations
+        
+        for (int comb = 0; comb < totalCombinations; ++comb) {
+            string expr;
+            expr += s[0];
+            
+            for (int i = 0; i < numOperators; ++i) {
+                expr += (comb & (1 << i)) ? '*' : '+';
+                expr += s[i + 1];
+            }
+            expr += s[n - 1];
+            
+            long long value = evaluateExpression(expr);
+            min_value = min(min_value, value);
+        }
+        
+        cout << min_value << endl;
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    
+    solve();
+    
+    return 0;
 }

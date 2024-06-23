@@ -8,26 +8,26 @@ int main(){
     cout.tie(0);
     int n;cin>>n;
     for(int i=0;i<n;i++){
-        int ai;cin>>ai;
+        int ai;
+        cin>>ai;
         freq[ai]++;
     }
-    //for(int i=0;i<100;i++)cout<<freq[i]<<" ";
-    
-    for(int i=MAXN;i>0;i--){
-        if(freq[i]>1){
-            cout<<i<<"\n";
-            return 0;  
+    int maxgcd=1;
+    for(int i=MAXN-1;i>=2;i--){
+        int count=0;
+        for(int j=i;j<MAXN;j+=i){
+            count+=freq[j];
+            if(count>=2)break;    
         }
-        else if(freq[i]){
-            for(int j=i;j<=MAXN;j+=i){
-                if(j==i)continue;
-                if(freq[j]){
-                    cout<<i<<"\n";
-                    return 0;
-                }
-            }
+        if(count>=2){
+            maxgcd=i;
+            break;
         }
+        
     }
+    cout<<maxgcd<<"\n";
+    return 0;
+    
 
     
 }
